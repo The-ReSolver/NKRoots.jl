@@ -51,21 +51,23 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
     end
 
     for iter = 1:opts.maxiter
-
-        # init right hand side to negative residual
-        dx .= .- r
+        # set initial guess to zero
+        dx .= 0
 
         # overwrites dx with solution
-        _, gmres_r_norm, gmres_iter =  gmres!(jac, dx, Δ; rtol=opts.gmres_rtol,
-                                                       maxiter=opts.gmres_maxiter,
-                                                       m=opts.gmres_m,
-                                                       verbose=opts.gmres_verbose)
+        _, gmres_r_norm, gmres_iter =  gmres!(dx, jac, r, Δ; rel_rtol=opts.gmres_rel_rtol,
+                                                              maxiter=opts.gmres_maxiter,
+                                                                    m=opts.gmres_m,
+                                                              verbose=opts.gmres_verbose)
+
+        # relative erro norm
+        gmres_rel_rnorm = gmres_r_norm/r_norm
 
         # whether the correction is within the trust region boundary
         hits_boundary = norm(dx) ≥ Δ
 
-        # new maybe solution
-        xx .= x .+ dx
+        # new candiate solution. Note we used the positive residual for the linear system
+        xx .= x .- dx
 
         # new residual
         F(rr, xx)
@@ -73,9 +75,8 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
         # new residual norm
         rr_norm = norm(rr)
 
-        # calculate ration of actual and predicted reduction of residual norm
-        # Note that the norm returned by gmres is relative to the right hand side!
-        ρ = (r_norm^2 - rr_norm^2)/(r_norm^2 - (gmres_r_norm*r_norm).^2)
+        # calculate ratio of actual and predicted reduction of residual norm
+        ρ = (r_norm^2 - rr_norm^2)/(r_norm^2 - gmres_r_norm.^2)
 
         # trust region update
         if ρ  < 1/4
@@ -102,7 +103,7 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
 
         # display output
         if opts.verbose && (iter % opts.skipiter == 0)
-            display_status(iter, gmres_iter, gmres_r_norm, dx_norm, Δ, ρ, r_norm)
+            display_status(iter, gmres_iter, gmres_rel_rnorm, dx_norm, Δ, ρ, r_norm)
         end
 
         # execute callback if needed

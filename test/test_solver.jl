@@ -4,7 +4,7 @@ function test1(out::Vector, x::Vector)
     return out
 end
 
-@testset "test 1                                 " begin
+@testset "test 1                                   " begin
 
     for use_AD in [true, false]
         # initial guess
@@ -31,7 +31,5 @@ end
                 norm(x - [1.0])       < opts.dx_norm_tol ||
                 norm(test1([0.0], x)) < opts.r_norm_tol
               )
-
-        # callback
     end
 end

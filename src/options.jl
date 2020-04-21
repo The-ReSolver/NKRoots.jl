@@ -15,8 +15,8 @@ export Options
     # GMRES parameters
     gmres_maxiter::Int     = 10           # maximum number of GMRES iterations
     gmres_verbose::Bool    = false        # print GMRES iteration status
-       gmres_rtol::Float64 = 1e-8         # GMRES relative stopping tolerance
-          gmres_m::Int     = 10           # GMRES relative stopping tolerance
+   gmres_rel_rtol::Float64 = 1e-2         # GMRES relative stopping tolerance
+          gmres_m::Int     = 10           # restart parameter
 
     # hookstep algorithm parameters
          min_step::Float64 = 1e-4         # 
