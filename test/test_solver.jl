@@ -30,6 +30,6 @@ end
         @test ( 
                 norm(x - [1.0])       < opts.dx_norm_tol ||
                 norm(test1([0.0], x)) < opts.r_norm_tol
-              )
+            )
     end
 end

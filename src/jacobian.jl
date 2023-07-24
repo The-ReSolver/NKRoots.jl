@@ -72,16 +72,21 @@ function Base.:*(op::JacobianFD{X}, y::X) where {X}
             x = op.x
            Fx = op.Fx
             ϵ = op.ϵ
-            δ = ϵ./norm(y)  
-
-    # perturbed input
-    x_plus_y .= x .+ δ .* y
+            δ = ϵ.*norm(y)
     
-    # calculate function with perturbed input
-    op.F(Fx_plus_y, x_plus_y)
+    # if perturbation is zero set output to zero
+    if norm(y) == 0
+        out .= 0
+    else
+        # perturbed input
+        x_plus_y .= x .+ δ .* y
+        
+        # calculate function with perturbed input
+        op.F(Fx_plus_y, x_plus_y)
 
-    # calculate finite difference approximation of gradient 
-    out .= (Fx_plus_y .- Fx)./δ
+        # calculate finite difference approximation of gradient 
+        out .= (Fx_plus_y .- Fx)./δ
+    end
 
     return out
 end
