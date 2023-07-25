@@ -1,7 +1,7 @@
 name = "NKRoots"
 uuid = "a8d363ce-860c-11ea-26b8-f7d5a45d10c5"
 authors = ["Davide Lasagna <lasagnadavide@gmail.com>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 DualNumbers = "fa6b7ba4-c1ee-5f82-b5fc-ecf0adba8f74"
