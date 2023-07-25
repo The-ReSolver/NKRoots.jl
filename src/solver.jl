@@ -55,15 +55,17 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
         dx .= 0
 
         # overwrites dx with solution
-        # FIXME: hookstep doesn't work with JacobianFD due to inability to take SVD
-        # _, gmres_r_norm, gmres_iter =  gmres!(dx, jac, r, Δ; rel_rtol=opts.gmres_rel_rtol,
-        #                                                       maxiter=opts.gmres_maxiter,
-        #                                                             m=opts.gmres_m,
-        #                                                       verbose=opts.gmres_verbose)
-        _, gmres_r_norm, gmres_iter = gmres!(dx, jac, r; rel_rtol=opts.gmres_rel_rtol,
-                                                        maxiter=opts.gmres_maxiter,
-                                                        m=opts.gmres_m,
-                                                        verbose=opts.gmres_verbose)
+        if opts.use_hookstep
+            _, gmres_r_norm, gmres_iter = gmres!(dx, jac, r, Δ; rel_rtol=opts.gmres_rel_rtol,
+                                                                maxiter=opts.gmres_maxiter,
+                                                                m=opts.gmres_m,
+                                                                verbose=opts.gmres_verbose)
+        else
+            _, gmres_r_norm, gmres_iter = gmres!(dx, jac, r; rel_rtol=opts.gmres_rel_rtol,
+                                                            maxiter=opts.gmres_maxiter,
+                                                            m=opts.gmres_m,
+                                                            verbose=opts.gmres_verbose)
+        end
 
         # relative erro norm
         gmres_rel_rnorm = gmres_r_norm/r_norm

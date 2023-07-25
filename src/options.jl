@@ -19,7 +19,8 @@ export Options
           gmres_m::Int     = 10           # restart parameter
 
     # hookstep algorithm parameters
-         min_step::Float64 = 1e-4         # 
+        use_hookstep::Bool = true         # whether to use hookstep in GMRES
+         min_step::Float64 = 1e-4
                 α::Float64 = 1
            NR_lim::Float64 = 1e-8
            Δ_init::Float64 = 1            # initial trust region radius

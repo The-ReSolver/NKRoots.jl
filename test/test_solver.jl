@@ -6,12 +6,12 @@ end
 
 @testset "test 1                                   " begin
 
-    for use_AD in [true, false]
+    for use_AD in [true, false], use_hookstep in [true, false]
         # initial guess
         x = Float64[2.0]
 
         # default options
-        opts = Options(use_AD=use_AD, verbose=false)
+        opts = Options(use_AD=use_AD, use_hookstep=use_hookstep, verbose=false)
 
         data = []
         callback(it, x) = push!(data, x[1])
