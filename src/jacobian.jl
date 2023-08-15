@@ -72,7 +72,7 @@ function Base.:*(op::JacobianFD{X}, y::X) where {X}
             x = op.x
            Fx = op.Fx
             ϵ = op.ϵ
-            δ = ϵ.*norm(y)/norm(x)
+            δ = ϵ.*norm(y)/norm(x) # choice of δ given on page 10 of: https://arxiv.org/pdf/1908.06730.pdf
 
     # if perturbation is zero set output to zero
     if norm(y) == 0
