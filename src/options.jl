@@ -28,5 +28,3 @@ export Options
             Δ_min::Float64 = 10^(-8)      # maximum trust region radius
                 η::Float64 = 0.00         # maximum trust region radius
 end
-
-      
