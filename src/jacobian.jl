@@ -84,7 +84,7 @@ function Base.:*(op::JacobianFD{X, <:Any, STEP}, y::X) where {X, STEP}
 
     # if perturbation is zero set output to zero
     if norm(y) == 0
-        out .= 0
+        out .= zero(out)
     else
         # perturbed input
         x_plus_y .= x .+ δ .* y
