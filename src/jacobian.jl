@@ -57,7 +57,7 @@ struct JacobianFD{X, FT, STEP}
 end
 
 # outer constructor
-jacobianFD(F, x, ϵ::Float64=1e-6; step_size::EpsilonMethod=Average()) =
+jacobianFD(F, x, ϵ::Float64=1e-6; step_size::EpsilonMethod=Nitsol()) =
     JacobianFD{typeof(x), typeof(F), typeof(step_size)}(F, x, F(similar(x), x), (similar(x), similar(x)), ϵ)
 
 # methods to compute FD step size (see page 363 of https://www.sciencedirect.com/science/article/pii/S0021999103004340)
