@@ -52,7 +52,7 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
 
     for iter = 1:opts.maxiter
         # set initial guess to zero
-        dx .= 0
+        dx .= zero.(dx)
 
         # overwrites dx with solution
         if opts.use_hookstep
