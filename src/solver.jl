@@ -37,6 +37,9 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
 
     # initialize status
     status = :maxiter_reached
+    it = opts.maxiter
+    gmres_maxit = 0
+    gmres_minres = 1.0
 
     # print header and zero iteration
     if opts.verbose
@@ -66,6 +69,10 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
                                                             m=opts.gmres_m,
                                                             verbose=opts.gmres_verbose)
         end
+
+        # update GMRES status
+        gmres_maxit < gmres_iter ? gmres_maxit = gmres_iter : nothing
+        gmres_minres > gmres_r_norm ? gmres_minres = gmres_r_norm : nothing
 
         # relative erro norm
         gmres_rel_rnorm = gmres_r_norm/r_norm
@@ -121,10 +128,12 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
         # tolerances reached
         if r_norm <  opts.r_norm_tol
             status = :converged
+            it = iter
             break
         end
         if dx_norm < opts.dx_norm_tol
             status = :converged
+            it = iter
             break
         end
         # if step < opts.min_step
@@ -134,7 +143,7 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
     end
 
     
-    return status
+    return status, it, gmres_maxit, gmres_minres
 end
 
 
