@@ -121,7 +121,7 @@ function nkroot!(F, x, opts::Options=Options(); callback=nothing)
         end
 
         # execute callback if needed
-        if !( callback == nothing)
+        if !( callback === nothing)
             callback(iter, x)
         end
 
